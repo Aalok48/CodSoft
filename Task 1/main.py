@@ -1,5 +1,6 @@
 from tkinter import *
 from openpyxl import Workbook, load_workbook
+from tkcalendar import Calendar, DateEntry
 
 root = Tk()                                                     # creating the root for tkinter
 root.geometry("375x500")                                        # defining the geometry for the tkinter window
@@ -26,36 +27,63 @@ def create():
     for widget in root.winfo_children():
         widget.destroy()
 
-    root.geometry('700x300')
+    root.geometry('700x550')
 
     # welcome frame for the add list
     create_welcome_frame = Frame(root, width=375, height=75)
     create_welcome_frame.pack(pady=35)
 
     # text lable for the add list
-    create_welcome_text = Label(create_welcome_frame, text='Add your to-do items', font=35)
+    create_welcome_text = Label(create_welcome_frame, text='Add your to-do items', font=45)
     create_welcome_text.place(x=85,y=35)
 
     # frame where all the text options and save button
-    create_menu_frame = Frame(root, width=375, height=275)
+    create_menu_frame = Frame(root, width=475, height=375)
     create_menu_frame.pack(pady=0)
 
     # area for the set_to_do
-    set_to_do = Label(create_menu_frame, width=30, height=10, font=10, text='Set-To-Do')
-    set_to_do.pack()
+    set_to_do = Label(create_menu_frame, width=12, font=10, text='To-Do activity: ')
+    set_to_do.place(x=0, y=30)
 
     # main text area for the add list
-    entry1 = Text(create_menu_frame, width=25, height=5, borderwidth=2, font=10)
-    entry1.pack()
+    entry1 = Text(create_menu_frame, width=25, height=5, borderwidth=2, font=10, relief=GROOVE)
+    entry1.place(x=135, y=0)
+
+    # lable for the category
+    set_category = Label(create_menu_frame, width=12, font=10, text='Category: ')
+    set_category.place(x=0, y=165)
 
     # relatively smaller text area for the category
-    category = Entry(create_menu_frame, width=10, font=10, borderwidth=2)
-    category.pack(pady=15)
+    category = Entry(create_menu_frame, width=10, font=10, borderwidth=2, relief=GROOVE)
+    category.place(x=135, y=165)
+
+    # lable for the date and time
+    date_time_lable = Label(create_menu_frame, font=10, text="Choose Date: ")
+    date_time_lable.place(x=0, y=225)
+
+    def show_calender():
+        top = Toplevel(root)
+        cal = Calendar(top, selectmode = 'day', year = 2023, month = 1, day = 1)
+        cal.pack()
+
+        def grab_date():
+            my_date = cal.get_date()
+            date_entry.delete(0, END)
+            date_entry.insert(0, my_date)
+            top.destroy()
+
+        Button(top, text='select', command=grab_date).pack()
+
+    date_entry = DateEntry(create_menu_frame, width=12, background = 'darkblue', foreground = 'white', borderwidth = 2)
+    date_entry.place(x=135, y=230)
+
+    print(date_entry)
 
     # function is called when the save button is clicked
     def save_items():
         to_do_entry = entry1.get('1.0', END)
         to_do_category = category.get()
+        to_do_date = date_entry.get()
 
         try:
         # Try to load the existing workbook
@@ -69,6 +97,7 @@ def create():
             sheet['A1'] = 'Task'
             sheet['B1'] = 'Category'
             sheet['C1'] = 'is_todo'
+            sheet['D1'] = 'Time'
 
     # Get the last row number
         last_row = sheet.max_row
@@ -77,12 +106,14 @@ def create():
         sheet.cell(row=last_row + 1, column=1).value = to_do_entry
         sheet.cell(row=last_row + 1, column=2).value = to_do_category
         sheet.cell(row=last_row + 1, column=3).value = True
+        sheet.cell(row=last_row + 1, column=4).value = to_do_date
+
 
         wb.save('to_do_list.xlsx')
         
 
     save_button = Button(create_menu_frame, text='Save', command=save_items, width=15, relief=GROOVE)
-    save_button.pack()
+    save_button.place(x = 150, y=300)
     
 
 # this is update function
