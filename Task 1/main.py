@@ -1,6 +1,7 @@
 from tkinter import *
 from openpyxl import Workbook, load_workbook
 from tkcalendar import Calendar, DateEntry
+from tkinter import messagebox as tmsg
 
 root = Tk()                                                     # creating the root for tkinter
 root.geometry("375x500")                                        # defining the geometry for the tkinter window
@@ -51,7 +52,7 @@ def create():
 
     # lable for the category
     set_category = Label(create_menu_frame, width=12, font=10, text='Category: ')
-    set_category.place(x=0, y=165)
+    set_category.place(x=-18, y=165)
 
     # relatively smaller text area for the category
     category = Entry(create_menu_frame, width=10, font=10, borderwidth=2, relief=GROOVE)
@@ -77,39 +78,40 @@ def create():
     date_entry = DateEntry(create_menu_frame, width=12, background = 'darkblue', foreground = 'white', borderwidth = 2)
     date_entry.place(x=135, y=230)
 
-    print(date_entry)
-
     # function is called when the save button is clicked
     def save_items():
         to_do_entry = entry1.get('1.0', END)
         to_do_category = category.get()
         to_do_date = date_entry.get()
 
-        try:
-        # Try to load the existing workbook
-            wb = load_workbook('to_do_list.xlsx')
-            sheet = wb.active
-        except FileNotFoundError:
-        # If the file doesn't exist, create a new workbook
-            wb = Workbook()
-            sheet = wb.active
-            sheet.title = "To-Do List"
-            sheet['A1'] = 'Task'
-            sheet['B1'] = 'Category'
-            sheet['C1'] = 'is_todo'
-            sheet['D1'] = 'Time'
+        if to_do_entry or to_do_category == '':
+            tmsg.showerror('Error', 'Text or category cannot be empty')
+        else:
+            try:
+            # Try to load the existing workbook
+                wb = load_workbook('to_do_list.xlsx')
+                sheet = wb.active
+            except FileNotFoundError:
+            # If the file doesn't exist, create a new workbook
+                wb = Workbook()
+                sheet = wb.active
+                sheet.title = "To-Do List"
+                sheet['A1'] = 'Task'
+                sheet['B1'] = 'Category'
+                sheet['C1'] = 'is_todo'
+                sheet['D1'] = 'Time'
 
-    # Get the last row number
-        last_row = sheet.max_row
+        # Get the last row number
+            last_row = sheet.max_row
 
-    # Write data to the next available row
-        sheet.cell(row=last_row + 1, column=1).value = to_do_entry
-        sheet.cell(row=last_row + 1, column=2).value = to_do_category
-        sheet.cell(row=last_row + 1, column=3).value = True
-        sheet.cell(row=last_row + 1, column=4).value = to_do_date
+        # Write data to the next available row
+            sheet.cell(row=last_row + 1, column=1).value = to_do_entry
+            sheet.cell(row=last_row + 1, column=2).value = to_do_category
+            sheet.cell(row=last_row + 1, column=3).value = True
+            sheet.cell(row=last_row + 1, column=4).value = to_do_date
 
 
-        wb.save('to_do_list.xlsx')
+            wb.save('to_do_list.xlsx')
         
 
     save_button = Button(create_menu_frame, text='Save', command=save_items, width=15, relief=GROOVE)
