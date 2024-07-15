@@ -84,7 +84,7 @@ def create():
         to_do_category = category.get()
         to_do_date = date_entry.get()
 
-        if to_do_entry or to_do_category == '':
+        if to_do_entry.strip() == "" or to_do_category == "":
             tmsg.showerror('Error', 'Text or category cannot be empty')
         else:
             try:
@@ -111,8 +111,9 @@ def create():
             sheet.cell(row=last_row + 1, column=4).value = to_do_date
 
 
-            wb.save('to_do_list.xlsx')
-        
+            wb.save('to_do_list.xlsx')   
+            entry1.delete('1.0', END)
+            category.delete(0, END)
 
     save_button = Button(create_menu_frame, text='Save', command=save_items, width=15, relief=GROOVE)
     save_button.place(x = 150, y=300)
@@ -120,7 +121,9 @@ def create():
 
 # this is update function
 def update():
-    print('Update button clicked')
+    for widget in root.winfo_children():
+        widget.destroy()
+    
 
 # this is track function
 def track():
