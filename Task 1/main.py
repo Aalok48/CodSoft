@@ -127,7 +127,7 @@ def update():
 
 # this is track function
 def track():
-    print('Track button clicked')
+    print('Track button clicks')
 
 # three button namingly create, update and track button are made
 # this is create button
