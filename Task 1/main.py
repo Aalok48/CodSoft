@@ -123,6 +123,11 @@ def create():
 def update():
     for widget in root.winfo_children():
         widget.destroy()
+    text = Text(root)
+    text.grid(row = 0, column = 0, sticky='nsew')
+    scrollbar = Scrollbar(root, orient="vertical", command=text.yview, width=20)
+    scrollbar.grid(row=0, column=1, sticky='ns')
+    text.config(yscrollcommand=scrollbar.set)
     
 
 # this is track function
