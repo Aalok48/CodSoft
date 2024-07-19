@@ -25,4 +25,26 @@ def click(event):
         scvalue.set(scvalue.get()+text)
         screen.update()
 
+scvalue=StringVar()
+scvalue.set("")
+screen=Entry(root,textvariable=scvalue,font="comicsans 25",relief='groove')
+screen.pack(ipadx=10,pady=15)
+
+#frame for buttons 9 8 7
+f1=Frame(root)
+for i in range(7,10):
+    b=Button(f1,text="{}".format(i),padx=10,pady=8)
+    b.pack(side=LEFT,padx=10)
+    b.bind("<Button-1>",click)
+f1.pack(pady=15)
+
+
+#frame for buttons 6 5 4
+f2=Frame(root)
+for i in range(4,7):
+    b=Button(f2,text="{}".format(i),padx=10,pady=8)
+    b.pack(side=LEFT,padx=10)
+    b.bind("<Button-1>",click)
+f2.pack(pady=15)
+
 root.mainloop()
