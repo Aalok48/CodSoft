@@ -47,4 +47,30 @@ for i in range(4,7):
     b.bind("<Button-1>",click)
 f2.pack(pady=15)
 
+#frame for buttons 3 2 1
+f3=Frame(root)
+for i in range(1,4):
+    b=Button(f3,text="{}".format(i),padx=10,pady=8)
+    b.pack(side=LEFT,padx=10)
+    b.bind("<Button-1>",click)
+f3.pack(pady=15)
+
+#frame for c = and 0
+f4=Frame(root)
+l1=['c','=','0']
+for i in range(len(l1)):
+    b = Button(f4, text=l1[i],padx=10,pady=8)
+    b.pack(side=LEFT,padx=10)
+    b.bind("<Button-1>", click)
+f4.pack(pady=15) 
+
+#function for mathematical operatio + - /
+f5=Frame(root)
+l2=['+','-','/']
+for i in range(len(l2)):
+    b=Button(f5,text=l2[i],padx=10,pady=8)
+    b.pack(side=LEFT,padx=10)
+    b.bind("<Button-1>",click)
+f5.pack(pady=15)
+
 root.mainloop()
