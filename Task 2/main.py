@@ -1,7 +1,7 @@
 from tkinter import *
 
 root = Tk()
-root.geometry("400x425")
+root.geometry("400x525")
 root.resizable(False,False)
 root.title("Calculator project")
 root.iconbitmap("D:\CodSoft\Task 2\photos\download.ico") 
@@ -72,5 +72,13 @@ for i in range(len(l2)):
     b.pack(side=LEFT,padx=10)
     b.bind("<Button-1>",click)
 f5.pack(pady=15)
+
+f6=Frame(root)
+l2=['*']
+for i in range(len(l2)):
+    b=Button(f6,text=l2[i],padx=10,pady=8)
+    b.pack(side=LEFT,padx=10)
+    b.bind("<Button-1>",click)
+f6.pack(pady=15)
 
 root.mainloop()
