@@ -199,7 +199,24 @@ def edit():
     root_edit.mainloop()
 
 def view():
-    pass
+    root3 = Tk()
+    root3.title("Contacts")
+    text = Text(root3)
+    text.grid(row=0, column=0, sticky='nsew')
+
+    # scrollbar for the view interface to scroll if there are many contacts
+    scrollbar = Scrollbar(root3, orient="vertical", command=text.yview, width=20)
+    scrollbar.grid(row=0, column=1, sticky='ns')
+    text.config(yscrollcommand=scrollbar.set)
+    # Open the file in read mode
+    with open('data.txt', 'r') as f:
+        # Loop through each line of the file
+        for line in f:
+            # Convert the line to a dictionary using eval()
+            my_dict = eval(line)
+            contents = f'Name: {list(my_dict.keys())[0]}\nContact: {my_dict[list(my_dict.keys())[0]]["contact"]}\nAddress: {my_dict[list(my_dict.keys())[0]]["address"]}\nGmail: {my_dict[list(my_dict.keys())[0]]["gmail"]}\n\n---\n\n '
+            text.insert(END, contents)
+        f.close()
 
 def search():
     pass
