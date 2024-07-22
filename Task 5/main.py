@@ -219,7 +219,43 @@ def view():
         f.close()
 
 def search():
-    pass
+    root_search = Tk()
+    root_search.geometry("200x75")
+    root_search.title("Search Contact")
+    Label(root_search, text="Enter contact: ").place(x=5, y=5)
+    # entry box for the contact to be searched
+    search_entry = Entry(root_search, width=15, relief="solid")
+    search_entry.place(x=90, y=5)
+
+    # code that searches the contact in file and shows in a new interface
+    def search2():
+        search_text = search_entry.get()
+        with open("data.txt", "r") as file:
+            content = file.readlines()
+            found_match = False
+            for line in content:
+                if search_text in line:
+                    my_dict = eval(line)
+                    contents = f'Name: {list(my_dict.keys())[0]}\nContact: {my_dict[list(my_dict.keys())[0]]["contact"]}\nAddress: {my_dict[list(my_dict.keys())[0]]["address"]}\nGmail: {my_dict[list(my_dict.keys())[0]]["gmail"]}'
+                    root_search_view = Tk()
+                    root_search_view.geometry("300x100")
+                    root_search_view.title("Contacts")
+                    root_search_view.resizable(False, False)
+                    Label(root_search_view, text=contents).pack()
+                    root_search.destroy()
+                    found_match = True
+                    root_search_view.mainloop()
+                    break
+
+            # code that shows error if non-existing contact is searched
+            if not found_match:
+                root_search.destroy()
+                tmsg.showerror("ERROR", "Contact not found")
+        file.close()
+
+    # button that calls the search function
+    Button(root_search, text="Search", border=0, borderwidth=0, font="comics 10", command=search2).place(x=65, y=45)
+    root_search.mainloop()
 
 # creating first button named add a contact
 b1 = Button(button_frame, text="1. Add a contact", command=add, borderwidth=0, font="15")
