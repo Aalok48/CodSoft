@@ -76,6 +76,7 @@ def delete():
     root_delete = Tk()
     root_delete.title("Delete a contact")
     root_delete.geometry("200x100")
+    root_delete.iconbitmap('D:\CodSoft\Task 5\Photos\contact.ico')
     label4 = Label(root_delete, text="Enter name: ")
     label4.place(x=10, y=20)
     del_entry = Entry(root_delete, width=15, relief="sunken")
@@ -111,10 +112,11 @@ def edit():
     root_edit = Tk()
     root_edit.title("Edit contact")
     root_edit.geometry("225x90")
+    root_edit.iconbitmap('D:\CodSoft\Task 5\Photos\contact.ico')
     label_edit = Label(root_edit, text="Enter name:", font="comics 12")
     label_edit.place(x=5, y=5)
     # entry box for the contact to be searched
-    entry_edit = Entry(root_edit, width=15, borderwidth=3, border=3, relief="ridge")
+    entry_edit = Entry(root_edit, width=15, relief="sunken")
     entry_edit.place(x=100, y=5)
 
     def edit2():
@@ -201,6 +203,7 @@ def edit():
 def view():
     root3 = Tk()
     root3.title("Contacts")
+    root3.iconbitmap('D:\CodSoft\Task 5\Photos\contact.ico')
     text = Text(root3)
     text.grid(row=0, column=0, sticky='nsew')
 
@@ -221,6 +224,7 @@ def view():
 def search():
     root_search = Tk()
     root_search.geometry("200x75")
+    root_search.iconbitmap('D:\CodSoft\Task 5\Photos\contact.ico')
     root_search.title("Search Contact")
     Label(root_search, text="Enter contact: ").place(x=5, y=5)
     # entry box for the contact to be searched
