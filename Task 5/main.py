@@ -107,7 +107,96 @@ def delete():
     root_delete.mainloop()
 
 def edit():
-    pass
+    # GUI for the entry of contact to be searched
+    root_edit = Tk()
+    root_edit.title("Edit contact")
+    root_edit.geometry("225x90")
+    label_edit = Label(root_edit, text="Enter name:", font="comics 12")
+    label_edit.place(x=5, y=5)
+    # entry box for the contact to be searched
+    entry_edit = Entry(root_edit, width=15, borderwidth=3, border=3, relief="ridge")
+    entry_edit.place(x=100, y=5)
+
+    def edit2():
+        edit2_var = entry_edit.get()
+        root_edit.destroy()
+        with open("data.txt", "r") as file:
+            content = file.readlines()
+            for line in content:
+                if edit2_var in line:
+                    info_list = []
+                    line2 = eval(line)
+                    for name, info in line2.items():
+                        contact_number = info['contact']
+                        address = info['address']
+                        gmail = info['gmail']
+                        info_list.append([contact_number, address, gmail])
+                    a = info_list[0]
+                    root_edit_view = Tk()
+                    root_edit_view.geometry("350x300")
+                    root_edit_view.title("Edit contact")
+                    # code for name label and name entry
+                    name = Label(root_edit_view, text="Name:", font="comics 12")
+                    name.place(x=35, y=50)
+                    name_entry = Entry(root_edit_view, width=25, relief="groove", borderwidth=5, border=5)
+                    name_entry.insert(END, edit2_var)
+                    name_entry.place(x=105, y=50, )
+
+                    # code for contact label and contact entry
+                    contact = Label(root_edit_view, text="Contact:", font="comics 12")
+                    contact.place(x=35, y=90)
+                    contact_entry = Entry(root_edit_view, width=25, relief="groove", borderwidth=5, border=5)
+                    contact_entry.insert(END, a[0])
+                    contact_entry.place(x=105, y=90)
+
+                    # code for address label and address entry
+                    address = Label(root_edit_view, text="Address:", font="comics 12")
+                    address.place(x=35, y=130)
+                    address_entry = Entry(root_edit_view, width=25, relief="groove", border=5, borderwidth=5)
+                    address_entry.insert(END, a[1])
+                    address_entry.place(x=105, y=130)
+
+                    # code for gmail label and gmail entry
+                    gmail = Label(root_edit_view, text="G-mail:", font="comics 12")
+                    gmail.place(x=35, y=170)
+                    gmail_entry = Entry(root_edit_view, width=25, relief="groove", border=5, borderwidth=5)
+                    gmail_entry.insert(END, a[2])
+                    gmail_entry.place(x=105, y=170)
+
+                    def save_changes():
+                        new_name = name_entry.get()
+                        new_contact_number = contact_entry.get()
+                        new_address = address_entry.get()
+                        new_gmail = gmail_entry.get()
+                        root_edit_view.destroy()
+                        new_info = {'contact': new_contact_number, 'address': new_address.capitalize(),
+                                    'gmail': new_gmail}
+                        new_line = {new_name.capitalize(): new_info}
+                        try:
+                            content.remove(line)
+                        except ValueError:
+                            tmsg.showinfo("Error", "Contact not found")
+                            return
+                        content.append(str(new_line) + "\n")
+                        with open("data.txt", "w") as file1:
+                            file1.writelines(content)
+                        tmsg.showinfo("Success", "Contact updated successfully")
+
+                    # button for the finish block
+                    Button(root_edit_view, text="Save changes", width=10, borderwidth=0, font="comics 11",
+                           command=save_changes).place(x=125,
+                                                       y=230)
+                    file.close()
+                    root_edit_view.mainloop()
+                    break
+
+            else:
+                tmsg.showerror("ERROR", "Contact searched is not saved ")
+
+    # button call the edit2 function to initiate the edit process
+    button_edit = Button(root_edit, text="Next", borderwidth=0, border=0, font="comics 12", command=edit2)
+    button_edit.place(x=85, y=50)
+    root_edit.mainloop()
 
 def view():
     pass
