@@ -73,7 +73,38 @@ def add():
     root2.mainloop()
 
 def delete():
-    pass
+    root_delete = Tk()
+    root_delete.title("Delete a contact")
+    root_delete.geometry("200x100")
+    label4 = Label(root_delete, text="Enter name: ")
+    label4.place(x=10, y=20)
+    del_entry = Entry(root_delete, width=15, relief="sunken")
+    del_entry.place(x=85, y=20)
+
+    # the delete function asks for the name of the contact to be deleted and stores it in the del_entry_value variable
+    # the file where the data is stored is opened in read mode and the data is stored in content variable
+    # a new list is created and the content variable is iterated and checked for the contact to be deleted
+    # the contact that is not matched with contact to be deleted is saved to list and stored to the file
+    def delete_contact():
+        del_entry_value = del_entry.get()
+        with open("data.txt", "r") as file:
+            content = file.readlines()
+
+        new_content = []
+        for line in content:
+            if del_entry_value not in line:
+                new_content.append(line)
+
+        with open("data.txt", "w") as file:
+            file.writelines(new_content)
+            file.close()
+
+        root_delete.destroy()
+
+    button_del = Button(root_delete, text="Delete", width=10, relief="groove", command=delete_contact)
+    button_del.place(x=65, y=55)
+
+    root_delete.mainloop()
 
 def edit():
     pass
