@@ -1,7 +1,8 @@
 from tkinter import *
 from openpyxl import Workbook, load_workbook
 from tkcalendar import Calendar, DateEntry
-from tkinter import messagebox as tmsg
+from tkinter import messagebox as tmsg, ttk
+import pandas as pd
 
 root = Tk()                                                     # creating the root for tkinter
 root.geometry("375x500")                                        # defining the geometry for the tkinter window
@@ -99,7 +100,7 @@ def create():
                 sheet['A1'] = 'Task'
                 sheet['B1'] = 'Category'
                 sheet['C1'] = 'is_todo'
-                sheet['D1'] = 'Time'
+                sheet['D1'] = 'Date'
 
         # Get the last row number
             last_row = sheet.max_row
@@ -123,11 +124,46 @@ def create():
 def update():
     for widget in root.winfo_children():
         widget.destroy()
-    text = Text(root)
-    text.grid(row = 0, column = 0, sticky='nsew')
-    scrollbar = Scrollbar(root, orient="vertical", command=text.yview, width=20)
+
+    root.geometry('603x230')
+
+    df = pd.read_excel('to_do_list.xlsx')
+    
+
+    # Filter rows where 'is_todo' is True
+    todo_rows = df[df['is_todo'] == True]
+
+    tree = ttk.Treeview(root, columns=("Task", "Category", "Date"), show="headings")
+    tree.grid(row=0, column=0, sticky='nsew')
+
+    tree.heading("Task", text="Task")
+    tree.heading("Category", text="Category")
+    tree.heading("Date", text="Date")
+
+    for index, row in todo_rows.iterrows():
+       tree.insert("", END, values=(row['Task'], row['Category'], row['Date']))
+
+
+    # text = Text(root)
+    # text.grid(row = 0, column = 0, sticky='nsew')
+    # scrollbar = Scrollbar(root, orient="vertical", command=text.yview, width=20)
+    # scrollbar.grid(row=0, column=1, sticky='ns')
+    # text.config(yscrollcommand=scrollbar.set)
+
+    # for index, row in todo_rows.iterrows():
+    #     text.insert(END, f"Row {index+1}:\n")
+    #     for col in row.index:
+    #         text.insert(END, f"{col}: {row[col]}\n")
+    #     text.insert(END, "\n")
+
+    # Create a scrollbar for the Treeview
+    scrollbar = Scrollbar(root, orient="vertical", command=tree.yview)
     scrollbar.grid(row=0, column=1, sticky='ns')
-    text.config(yscrollcommand=scrollbar.set)
+    tree.config(yscrollcommand=scrollbar.set)
+
+# Example usage:
+    excel_file = "to_do_list.xlsx"  # Replace with your Excel file path
+    update(excel_file)
     
 
 # this is track function
