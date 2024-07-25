@@ -100,7 +100,7 @@ def create():
                 sheet['A1'] = 'Task'
                 sheet['B1'] = 'Category'
                 sheet['C1'] = 'is_todo'
-                sheet['D1'] = 'Date'
+                sheet['D1'] = 'to_do_date'
 
         # Get the last row number
             last_row = sheet.max_row
@@ -122,53 +122,64 @@ def create():
 
 # this is update function
 def update():
+    """
+    Updates the root window to display the content of the Excel sheet
+    where the 'is_todo' column is True, in a table format.
+    """
+
+    # Clear existing widgets
     for widget in root.winfo_children():
         widget.destroy()
 
-    root.geometry('603x230')
+    root.geometry('903x530')
 
     df = pd.read_excel('to_do_list.xlsx')
-    
 
     # Filter rows where 'is_todo' is True
     todo_rows = df[df['is_todo'] == True]
 
-    tree = ttk.Treeview(root, columns=("Task", "Category", "Date"), show="headings")
+    # Create a Treeview widget for the table
+    tree = ttk.Treeview(root, columns=("Task", "Category", "Date", 'Done'), show="headings")
     tree.grid(row=0, column=0, sticky='nsew')
 
+
+    tree.heading("Done", text="Done")
     tree.heading("Task", text="Task")
     tree.heading("Category", text="Category")
-    tree.heading("Date", text="Date")
+    tree.heading("Date", text="to_do_date")
 
-    for index, row in todo_rows.iterrows():
-       tree.insert("", END, values=(row['Task'], row['Category'], row['Date']))
-
-
-    # text = Text(root)
-    # text.grid(row = 0, column = 0, sticky='nsew')
-    # scrollbar = Scrollbar(root, orient="vertical", command=text.yview, width=20)
-    # scrollbar.grid(row=0, column=1, sticky='ns')
-    # text.config(yscrollcommand=scrollbar.set)
-
-    # for index, row in todo_rows.iterrows():
-    #     text.insert(END, f"Row {index+1}:\n")
-    #     for col in row.index:
-    #         text.insert(END, f"{col}: {row[col]}\n")
-    #     text.insert(END, "\n")
 
     # Create a scrollbar for the Treeview
     scrollbar = Scrollbar(root, orient="vertical", command=tree.yview)
     scrollbar.grid(row=0, column=1, sticky='ns')
     tree.config(yscrollcommand=scrollbar.set)
 
-# Example usage:
-    excel_file = "to_do_list.xlsx"  # Replace with your Excel file path
-    update(excel_file)
-    
-
 # this is track function
 def track():
-    print('Track button clicks')
+    for widget in root.winfo_children():
+        widget.destroy()
+
+    root.geometry('603x230')
+    df = pd.read_excel('to_do_list.xlsx')
+
+    todo_rows = df[df['is_todo'] == False]
+
+    tree = ttk.Treeview(root, columns=('Task', 'Category', 'Date'), show='headings')
+    tree.grid(row=0, column=0, sticky='nsew')
+
+    tree.heading('Task', text='Task')
+    tree.heading('Category', text='Category')
+    tree.heading('Date', text='Date')
+
+    for index, row in todo_rows.iterrows():
+        tree.insert('', END, values=(row['Task'], row['Category'], row['to_do_date']))
+
+    scrollbar = Scrollbar(root, orient='vertical', command=tree.yview)
+    scrollbar.grid(row=0, column=1, sticky=NS)
+    tree.config(yscrollcommand=scrollbar.set)
+
+    excel_file = 'to_do_list.xlsx'
+
 
 # three button namingly create, update and track button are made
 # this is create button
