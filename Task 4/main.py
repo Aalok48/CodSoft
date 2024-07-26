@@ -1,1 +1,4 @@
-print('Hello world'*10)
+from tkinter import *
+
+root = Tk()
+root.mainloop()
