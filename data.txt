@@ -1,1 +1,2 @@
 {'Alok': {'contact': '9840040481', 'address': 'Lamachaur', 'gmail': 'karnaalok48@gmail.com'}}
+{'Subhash': {'contact': '423423423', 'address': 'Lamachaur', 'gmail': 'subhash@gmail.com'}}
