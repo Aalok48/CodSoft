@@ -174,8 +174,6 @@ def update():
     # Bind the left-click event to the update_task function
     tree.bind("<Button-1>", update_task)
 
-    # ... (rest of your code)
-
 # this is track function
 def track():
     for widget in root.winfo_children():
