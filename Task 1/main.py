@@ -122,37 +122,59 @@ def create():
 
 # this is update function
 def update():
-    """
-    Updates the root window to display the content of the Excel sheet
-    where the 'is_todo' column is True, in a table format.
-    """
-
-    # Clear existing widgets
     for widget in root.winfo_children():
         widget.destroy()
 
     root.geometry('903x530')
-
     df = pd.read_excel('to_do_list.xlsx')
 
-    # Filter rows where 'is_todo' is True
-    todo_rows = df[df['is_todo'] == True]
-
-    # Create a Treeview widget for the table
-    tree = ttk.Treeview(root, columns=("Task", "Category", "Date", 'Done'), show="headings")
+    # Create a Treeview to display tasks
+    tree = ttk.Treeview(root, columns=('Task', 'Category', 'Date'), show='headings')
     tree.grid(row=0, column=0, sticky='nsew')
 
+    tree.heading('Task', text='Task')
+    tree.heading('Category', text='Category')
+    tree.heading('Date', text='Date')
 
-    tree.heading("Done", text="Done")
-    tree.heading("Task", text="Task")
-    tree.heading("Category", text="Category")
-    tree.heading("Date", text="to_do_date")
+    # Populate the Treeview with all tasks
+    for index, row in df.iterrows():
+        tree.insert('', END, values=(row['Task'], row['Category'], row['to_do_date']))
 
-
-    # Create a scrollbar for the Treeview
-    scrollbar = Scrollbar(root, orient="vertical", command=tree.yview)
-    scrollbar.grid(row=0, column=1, sticky='ns')
+    # Add a scrollbar
+    scrollbar = Scrollbar(root, orient='vertical', command=tree.yview)
+    scrollbar.grid(row=0, column=1, sticky=NS)
     tree.config(yscrollcommand=scrollbar.set)
+
+    # Function to handle updating the status of a task
+    def update_task(event):
+        selected_items = tree.selection()
+        if selected_items:
+            selected_item = selected_items[0]
+            # Check if the selected item is a header row
+            if selected_item == 'I000':  # Assuming 'I000' is the header row iid
+                tmsg.showinfo("Information", "Please select a task to update.")
+            else:
+                task_index = int(selected_item) - 1
+
+                # Get the current status (is_todo) from the DataFrame
+                current_status = df.loc[task_index, 'is_todo']
+
+                # Update the status in the DataFrame
+                df.loc[task_index, 'is_todo'] = not current_status
+
+                # Save the updated DataFrame back to the Excel file
+                df.to_excel('to_do_list.xlsx', index=False)
+
+                # Update the Treeview with the new status
+                if current_status:  # If the task was marked as 'todo'
+                    tree.item(selected_item, values=(row['Task'], row['Category'], row['to_do_date']))
+                else:  # If the task was marked as completed
+                    tree.delete(selected_item)  # Remove the item from the Treeview 
+
+    # Bind the left-click event to the update_task function
+    tree.bind("<Button-1>", update_task)
+
+    # ... (rest of your code)
 
 # this is track function
 def track():
